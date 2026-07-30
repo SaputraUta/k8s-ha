@@ -1,0 +1,36 @@
+# Terraform state & providers
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+# NOTE: .terraform.lock.hcl is intentionally committed (locks provider versions).
+
+# Terraform-generated local artifacts (regenerated on apply; key is SECRET)
+terraform/.ssh/
+terraform/cloud-init.yaml
+ansible/inventory.ini
+
+# SSH keys — never commit
+*.pem
+id_rsa*
+id_ed25519*
+
+# Ansible
+*.retry
+*.vault
+
+# Secrets / env
+*.env
+.env
+
+# macOS
+.DS_Store
