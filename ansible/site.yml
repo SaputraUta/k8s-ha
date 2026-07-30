@@ -1,0 +1,12 @@
+---
+- name: Prep all nodes for Kuberneted
+  hosts: k8s
+  become: true
+  roles:
+    - common
+
+- name: Set up kube-vip HA endpoint on control planes
+  hosts: control_plane
+  become: true
+  roles:
+    - kube_vip

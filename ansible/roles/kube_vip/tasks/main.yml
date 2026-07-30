@@ -1,0 +1,23 @@
+---
+- name: Ensure the static pod manifest directory exists
+  ansible.builtin.file:
+    path: /etc/kubernetes/manifests
+    state: directory
+    mode: "0755"
+
+- name: Pull the kube-vip image
+  ansible.builtin.command: "ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version }}"
+  changed_when: false
+
+- name: Generate the kube-vip static pod manifest
+  ansible.builtin.shell: >
+    ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version }} vip
+    /kube-vip manifest pod
+    --interface {{ ansible_default_ipv4.interface }}
+    --address {{ kube_vip_address }}
+    --controlplane
+    --arp
+    --leaderElection
+    > /etc/kubernetes/manifests/kube-vip.yaml
+  args:
+    creates: /etc/kubernetes/manifests/kube-vip.yaml
