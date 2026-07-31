@@ -12,11 +12,17 @@ resource "multipass_instance" "node" {
 resource "local_file" "ansible_inventory" {
   filename = "${path.module}/../ansible/inventory.ini"
   content  = <<-EOT
-    [control_plane]
+    [primary_cp]
     cp1 ansible_host=${multipass_instance.node["cp1"].ipv4}
+
+    [secondary_cp]
     cp2 ansible_host=${multipass_instance.node["cp2"].ipv4}
     cp3 ansible_host=${multipass_instance.node["cp3"].ipv4}
 
+    [control_plane:children]
+    primary_cp
+    secondary_cp
+    
     [workers]
     w1 ansible_host=${multipass_instance.node["w1"].ipv4}
     w2 ansible_host=${multipass_instance.node["w2"].ipv4}
