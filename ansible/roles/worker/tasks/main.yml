@@ -1,0 +1,5 @@
+---
+- name: Join this node to the cluster as a worker
+  ansible.builtin.command: "{{ hostvars['cp1'].join_command }}"
+  args:
+    creates: /etc/kubernetes/kubelet.conf

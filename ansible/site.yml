@@ -13,3 +13,24 @@
   hosts: primary_cp
   become: true
   roles: [kube_vip]
+
+- name: Install the CNI (Calico)
+  hosts: primary_cp
+  become: true
+  roles: [cni]
+
+- name: Join the remaining control planes
+  hosts: secondary_cp
+  become: true
+  serial: 1
+  roles: [join_control_plane]
+
+- name: Set up kube-vip on the remaining control planes
+  hosts: secondary_cp
+  become: true
+  roles: [kube_vip]
+
+- name: Join the workers
+  hosts: workers
+  become: true
+  roles: [worker]
